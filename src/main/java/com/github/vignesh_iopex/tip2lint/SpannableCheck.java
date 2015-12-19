@@ -15,12 +15,16 @@ import com.android.tools.lint.detector.api.Severity;
 import com.android.tools.lint.detector.api.Speed;
 import com.android.tools.lint.detector.api.XmlContext;
 import lombok.ast.AstVisitor;
+import lombok.ast.ClassDeclaration;
 import lombok.ast.ForwardingAstVisitor;
 import lombok.ast.MethodInvocation;
 import lombok.ast.Node;
+import lombok.ast.VariableDeclaration;
 import org.w3c.dom.Element;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -63,7 +67,11 @@ public class SpannableCheck extends ResourceXmlDetector implements Detector.Java
   }
 
   @Override public List<Class<? extends Node>> getApplicableNodeTypes() {
-    return Collections.<Class <? extends Node>>singletonList(MethodInvocation.class);
+    return Arrays.<Class <? extends Node>>asList(MethodInvocation.class, VariableDeclaration.class);
+  }
+
+  @Override public List<String> getApplicableMethodNames() {
+    return Arrays.asList("findViewById", "setText");
   }
 
   @Override public AstVisitor createJavaVisitor(final JavaContext context) {
